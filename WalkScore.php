@@ -29,7 +29,7 @@ class WalkScore {
    * @param array $options
    *   The options to send as the query appended to the URL
    */
-  function make_api_call($url, $options) {
+  private function make_api_call($url, $options) {
     $options['wsapikey'] = $this->wsapikey;
     $options['format'] = 'json';    
     $query = http_build_query($options);
@@ -62,7 +62,7 @@ class WalkScore {
    *   An object containing the results of the call.
    * @see http://www.walkscore.com/services/public-transit-api.php
    */
-  function PublicTransit($call, $options = array()) {
+  public function PublicTransit($call, $options = array()) {
     $api_url = 'http://transit.walkscore.com/transit/';
     switch ($call) {
       case 'score':
@@ -101,7 +101,7 @@ class WalkScore {
    *   the numeric status code returned in the object
    * @see http://www.walkscore.com/services/api.php
    */
-  function WalkScore($options = array()) {
+  public function WalkScore($options = array()) {
     if (!is_array($options)) {
       throw new Exception("Input parameter must be an array.");
     }
