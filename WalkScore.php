@@ -1,6 +1,18 @@
 <?php
+ 
+/**
+ * An implementation of the Walk Score API in PHP.
+ *
+ * @see http://www.walkscore.com/
+ */
 class WalkScore {
-
+  
+  /**
+   * Constructs a WalkScore object
+   *
+   * @param string $wsapikey
+   *   Walk Score API key obtainable at http://www.walkscore.com/request-api-key.php
+   */
   function __construct($wsapikey) {
     // a Walk Score API key is required
     if (!isset($wsapikey)) {
@@ -9,6 +21,14 @@ class WalkScore {
     $this->wsapikey = $wsapikey;
   }
 
+  /**
+   * Makes the API call using curl
+   *
+   * @param string $url
+   *   The URL to send the request to
+   * @param array $options
+   *   The options to send as the query appended to the URL
+   */
   function make_api_call($url, $options) {
     $options['wsapikey'] = $this->wsapikey;
     $options['format'] = 'json';    
@@ -24,6 +44,24 @@ class WalkScore {
     return $response;
   }
 
+  /**
+   * Implement the Walk Score Public Transit API
+   *
+   * @param string $call
+   *   Which call to make to the Public Transit API
+   *   - score: Returns the Transit Score for a given location.
+   *   - stop search: Returns information about stops near a given location.
+   *   - network search: Returns connected stops and routes near a given location.
+   *   - stop detail: Returns details for a single stop.
+   *   - route detail: eturns details for a single route.
+   *   - supported cities: Returns a list of cities for which scores are available.
+   * @param array $options
+   *   Options to send to the Public Transit API. Keys and values are dependent 
+   *   on the call made.
+   * @return
+   *   An object containing the results of the call.
+   * @see http://www.walkscore.com/services/public-transit-api.php
+   */
   function PublicTransit($call, $options = array()) {
     $api_url = 'http://transit.walkscore.com/transit/';
     switch ($call) {
@@ -49,6 +87,20 @@ class WalkScore {
     return $this->make_api_call($api_url, $options);
   }
 
+  /**
+   * Implementation of the Walk Score API
+   *
+   * @param array $options
+   *   An array of options. The array keys to pass are:
+   *   - address: string containing the street address of the location
+   *   - lat: string or number containing the latitude of the location
+   *   - lon: string or number containing the longitude of the location
+   * @return
+   *   An object containing the results of the call. An added property
+   *   called status_description gives a human-readable description of
+   *   the numeric status code returned in the object
+   * @see http://www.walkscore.com/services/api.php
+   */
   function WalkScore($options = array()) {
     if (!is_array($options)) {
       throw new Exception("Input parameter must be an array.");
