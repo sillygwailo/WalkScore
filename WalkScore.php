@@ -110,28 +110,16 @@ class WalkScore {
 
     // stuff the status code description in the response object
     // so you don't have to look it up on the Walk Score website
-    switch ($response->status) {
-      case 1:
-        $status_description = 'Walk Score successfully returned.';
-        break;
-      case 2: 
-        $status_description = 'Score is being calculated and is not currently available.';
-        break;
-      case 30:
-        $status_description = 'Invalid latitude/longitude.';
-        break;
-      case 40:
-        $status_description = 'Your WSAPIKEY is invalid.';
-        break;
-      case 41:
-        $status_description = 'Your daily API quota has been exceeded.';
-        break;
-      case 42:
-        $status_description = 'Your IP address has been blocked.';
-        break;
-    }
+    $status_descriptions = array(
+      1 => 'Walk Score successfully returned.',
+      2 => 'Score is being calculated and is not currently available.',
+      30 => 'Invalid latitude/longitude.',
+      40 => 'Your WSAPIKEY is invalid.',
+      41 => 'Your daily API quota has been exceeded.',
+      42 => 'Your IP address has been blocked.',
+    );
 
-    $response->status_description = $status_description;
+    $response->status_description = $status_descriptions[$response->status];
 
     return $response;
   }
