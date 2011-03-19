@@ -64,26 +64,15 @@ class WalkScore {
    */
   public function PublicTransit($call, $options = array()) {
     $api_url = 'http://transit.walkscore.com/transit/';
-    switch ($call) {
-      case 'score':
-        $api_url .= 'score/';
-        break;
-      case 'stop search':
-        $api_url .= 'search/stops/';
-        break;
-      case 'network search':
-        $api_url .= 'search/network/';
-        break;
-      case 'stop detail':
-        $api_url .= 'stop/ID/';
-        break;
-      case 'route detail':
-        $api_url .= 'route/ID/';
-        break;
-      case 'supported cities':
-        $api_url .= 'supported/cities/';
-        break;
-    }
+    $calls = array(
+      'score' => 'score/',
+      'stop search' =>  'search/stops/',
+      'network search' => 'search/network/',
+      'stop detail' => 'stop/ID/',
+      'route detail' => 'route/ID/',
+      'supported cities' => 'supported/cities/',
+    );
+    $api_url .= $calls[$call];
     return $this->make_api_call($api_url, $options);
   }
 
