@@ -112,4 +112,40 @@ class WalkScore {
 
     return $response;
   }
+
+  /**
+   * Implementation of the Walk Shed API
+   *
+   * @param array $options
+   *   An array of options. The array keys to pass are:
+   *   - lat: string or number containing the latitude of the location
+   *   - lon: string or number containing the longitude of the location
+   * @return
+   *   An object containing the results of the call. An added property
+   *   called status_description gives a human-readable description of
+   *   the numeric status code returned in the object
+   * @see http://www.walkscore.com/services/api.php
+   */
+  public function WalkShed($options = array()) {
+
+    if (!is_array($options)) {
+      throw new Exception("Input parameter must be an array.");
+    }
+    
+    $response = $this->make_api_call('http://api.walkscore.com/walk_shed', $options);
+    
+    // stuff the status code description in the response object
+    // so you don't have to look it up on the Walk Score website
+    $status_descriptions = array(
+      1 => 'Walk shed successfully returned.',
+      2 => 'Walk shed unavailable.',
+      30 => 'Invalid latitude/longitude.',
+      31 => 'Walk Score API internal error.',
+      40 => 'Your WSAPIKEY is invalid.',
+      41 => 'Your daily API quota has been exceeded.',
+    );
+    $response->status_description = $status_descriptions[$response->status];
+
+    return $response;
+  }
 }
