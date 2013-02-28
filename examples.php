@@ -31,3 +31,13 @@
   );
   printf("Public Transit Score for %s, %s (%s, %s):\n", $options['city'], $options['state'], $options['lat'], $options['lon']);
   print_r($w->PublicTransit('score', $options));
+
+  // Travel Time API example
+  // Example data from http://www.walkscore.com/professional/travel-time-api.php
+  $options = array(
+    'mode' => 'walk',
+    'origin' => '47.649677,-122.357569',
+    'destination' => '47.646757,-122.361152',
+  );
+  printf("Travel time (walking) between %s and %s:\n", $options['origin'], $options['destination']);
+  print_r($w->TravelTime($options));

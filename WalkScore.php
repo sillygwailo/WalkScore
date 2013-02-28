@@ -31,10 +31,11 @@ class WalkScore {
    */
   private function make_api_call($url, $options) {
     $options['wsapikey'] = $this->wsapikey;
-    $options['format'] = 'json';    
+    $options['format'] = 'json';
     $query = http_build_query($options);
     $response_url = $url . '?' . $query;
     $curlHandler = curl_init();
+    curl_setopt($curlHandler,CURLOPT_ENCODING , "gzip");
     curl_setopt($curlHandler, CURLOPT_URL, $response_url);
     curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, true);
     // curl_setopt($curlHandler, CURLOPT_USERAGENT, $user_agent);
@@ -74,6 +75,29 @@ class WalkScore {
     );
     $api_url .= $calls[$call];
     return $this->make_api_call($api_url, $options);
+  }
+
+  /**
+   * Implementation of the Walk Score API
+   *
+   * @param array $options
+   *   An array of options. The array keys to pass are:
+   *   - mode: string, one of 'walk', 'bike', 'drive', or 'transit'.
+   *   - origin: string containing a comma-separated lat,lng.
+   *   - destination: string containing a comma-separated lat,lng.
+   *  @todo Multiple destinations.
+   *  @ see http://www.walkscore.com/professional/travel-time-api.php
+   */
+  public function TravelTime($options = array()) {
+    if (!is_array($options)) {
+      throw new Exception("Input parameter must be an array.");
+    }
+    $modes = array('walk', 'bike', 'drive', 'transit');
+    if (!in_array($options['mode'], $modes)) {
+      throw new Exception("Mode parameter must be one of 'walk', 'bike', 'drive', or 'transit'.");
+    }
+    $response = $this->make_api_call('http://www.walkscore.com/api/v1/traveltime/json', $options);
+    return $response->response;
   }
 
   /**
